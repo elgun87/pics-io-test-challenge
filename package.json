@@ -1,0 +1,22 @@
+{
+  "name": "pics-io-saved-searches-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright + TypeScript test suite for the Pics.io Saved Searches feature",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:headed": "playwright test --project=chromium --headed",
+    "test:ui": "playwright test --ui",
+    "auth:manual": "MANUAL_LOGIN=1 playwright test --project=setup --headed",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^22.10.0",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.6.3"
+  }
+}

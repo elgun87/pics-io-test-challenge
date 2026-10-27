@@ -1,0 +1,38 @@
+name: Playwright tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 3 * * *' # nightly full run
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PICSIO_EMAIL: ${{ secrets.PICSIO_EMAIL }}
+      PICSIO_PASSWORD: ${{ secrets.PICSIO_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx playwright install --with-deps
+      - run: npm run typecheck
+      - name: Smoke (PRs) / full suite (main, nightly)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            npm run test:smoke
+          else
+            npm test
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
